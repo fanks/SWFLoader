@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
@@ -15,9 +16,14 @@ package
 	public class SWFLoader extends Sprite
 	{
 		private var loadingText:TextField = new TextField();
-		
+		public static var parameters:String = "?";
 		public function SWFLoader()
 		{
+			var getParams:Object = LoaderInfo(this.root.loaderInfo).parameters;
+			for (var key:String in getParams) {
+				parameters += key + "=" + getParams[key] + "&";
+			}
+			parameters = parameters.slice( 0, -1 );
 			
 			if (stage)
 				init();
@@ -31,7 +37,7 @@ package
 				removeEventListener(Event.ADDED_TO_STAGE, init);
 			}
 			var mLoader:Loader = new Loader();
-			var mRequest:URLRequest = new URLRequest("http://r.playerio.com/r/rymdenrunt-k9qmg7cvt0ylialudmldvg/Preload.swf?partnerId=notsocasual");
+			var mRequest:URLRequest = new URLRequest("http://r.playerio.com/r/rymdenrunt-k9qmg7cvt0ylialudmldvg/Preload.swf" + parameters);
 			
 			var loaderContext : LoaderContext = new LoaderContext();
 			loaderContext.checkPolicyFile = true;
@@ -44,7 +50,7 @@ package
 		
 		private function onCompleteHandler(loadEvent:Event):void
 		{
-			addChild(loadEvent.currentTarget.content);
+			//addChild(loadEvent.currentTarget.content);
 		}
 	}
 }
